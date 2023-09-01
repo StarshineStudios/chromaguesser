@@ -207,19 +207,29 @@ class _GameScreenState extends State<GameScreen> {
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
-                top: gameStarted
-                    ? 25
-                    : -MediaQuery.of(context).size.height * 0.1,
+                top:
+                    gameStarted ? 0 : -MediaQuery.of(context).size.height * 0.1,
                 left: 0,
                 right: 0,
                 child: Center(
-                  child: Text(
-                    'Score: $score \nHealth: $health',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                        left: 30, right: 30, top: 10, bottom: 10),
+                    decoration: const BoxDecoration(
+                      color: foregroundColor, // Medium grey color
+
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
                     ),
-                    textAlign: TextAlign.center,
+                    child: Text(
+                      'Score: $score \nHealth: $health',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),
@@ -392,7 +402,7 @@ class _GameScreenState extends State<GameScreen> {
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
-                top: gameStarted ? 85 : 140,
+                top: gameStarted ? 90 : 140,
                 left: 0,
                 right: 0,
                 child: Center(

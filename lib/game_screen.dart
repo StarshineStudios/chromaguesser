@@ -156,10 +156,6 @@ class _GameScreenState extends State<GameScreen> {
           });
         }
 
-        double wideness = MediaQuery.of(context).size.width;
-        double tallness = MediaQuery.of(context).size.height;
-        bool horizontal = wideness > tallness;
-
         bool previousReady = score >= 1;
         return GestureDetector(
           onTap: () {
@@ -407,7 +403,7 @@ class _GameScreenState extends State<GameScreen> {
                 right: 0,
                 child: Center(
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     width: MediaQuery.of(context).size.width * 0.8 < 275
                         ? MediaQuery.of(context).size.width * 0.8
                         : 275,

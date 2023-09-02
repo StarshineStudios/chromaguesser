@@ -4,6 +4,8 @@ const Color backgroundColor = Color.fromARGB(255, 31, 29, 50);
 
 const Color foregroundColor = Color.fromARGB(255, 68, 64, 103);
 
+const Color brightColor = Color.fromARGB(255, 87, 76, 190);
+
 const Color fadedColor = Color.fromARGB(255, 103, 102, 121);
 const Color lightColor = Color.fromARGB(255, 217, 216, 230);
 

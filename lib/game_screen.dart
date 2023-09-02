@@ -119,7 +119,10 @@ class _GameScreenState extends State<GameScreen> {
       valueListenable: Hive.box(generalBox).listenable(),
       builder: (context, box, widget) {
         int highscore = box.get('highscore', defaultValue: -1);
-        String highscoreText = highscore == -1 ? '' : 'Highscore: $highscore';
+        bool highscoreNew = box.get('highscoreNew', defaultValue: false);
+        String highscoreText = highscore == -1
+            ? ''
+            : '${highscoreNew ? 'New ' : ''}Highscore${highscoreNew ? '!' : ':'} $highscore';
 
         void check() {
           setState(() {
@@ -144,8 +147,12 @@ class _GameScreenState extends State<GameScreen> {
             //see if game should end
             if (health <= 0) {
               gameStarted = false;
+
               if (score > highscore) {
                 box.put('highscore', score);
+                box.put('highscoreNew', true);
+              } else {
+                box.put('highscoreNew', false);
               }
 
               health = maxHealth;
@@ -174,7 +181,7 @@ class _GameScreenState extends State<GameScreen> {
                 right: 0,
                 child: const Center(
                   child: Text(
-                    'ColorGuesser',
+                    'ChromaGuesser',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 35,
@@ -384,9 +391,16 @@ class _GameScreenState extends State<GameScreen> {
                                   fontSize: 20,
                                 ),
                               ),
-                              ElevatedButton(
+                              NiceButton(
                                 onPressed: check,
-                                child: const Text('Check'),
+                                color: brightColor,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Check',
+                                    style: TextStyle(color: lightColor),
+                                  ),
+                                ),
                               ),
                             ],
                           ),

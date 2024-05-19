@@ -120,18 +120,14 @@ class _GameScreenState extends State<GameScreen> {
       builder: (context, box, widget) {
         int highscore = box.get('highscore', defaultValue: -1);
         bool highscoreNew = box.get('highscoreNew', defaultValue: false);
-        String highscoreText = highscore == -1
-            ? ''
-            : '${highscoreNew ? 'New ' : ''}Highscore${highscoreNew ? '!' : ':'} $highscore';
+        String highscoreText = highscore == -1 ? '' : '${highscoreNew ? 'New ' : ''}Highscore${highscoreNew ? '!' : ':'} $highscore';
 
         void check() {
           setState(() {
             //Change score and health
             score++;
-            Color guessedColor = Color.fromRGBO(redSliderValue.toInt(),
-                greenSliderValue.toInt(), blueSliderValue.toInt(), 1);
-            health -=
-                totalDifference(absColorDifference(guessedColor, squareColor));
+            Color guessedColor = Color.fromRGBO(redSliderValue.toInt(), greenSliderValue.toInt(), blueSliderValue.toInt(), 1);
+            health -= totalDifference(absColorDifference(guessedColor, squareColor));
 
             //save the colors
 
@@ -174,9 +170,7 @@ class _GameScreenState extends State<GameScreen> {
             children: [
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
-                top: !gameStarted
-                    ? 75
-                    : -MediaQuery.of(context).size.height * 0.1,
+                top: !gameStarted ? 75 : -MediaQuery.of(context).size.height * 0.1,
                 left: 0,
                 right: 0,
                 child: const Center(
@@ -192,9 +186,7 @@ class _GameScreenState extends State<GameScreen> {
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
-                bottom: !gameStarted
-                    ? 75
-                    : -MediaQuery.of(context).size.height * 0.1,
+                bottom: !gameStarted ? 75 : -MediaQuery.of(context).size.height * 0.1,
                 left: 0,
                 right: 0,
                 child: Center(
@@ -210,20 +202,16 @@ class _GameScreenState extends State<GameScreen> {
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
-                top:
-                    gameStarted ? 0 : -MediaQuery.of(context).size.height * 0.1,
+                top: gameStarted ? 0 : -MediaQuery.of(context).size.height * 0.1,
                 left: 0,
                 right: 0,
                 child: Center(
                   child: Container(
-                    padding: const EdgeInsets.only(
-                        left: 30, right: 30, top: 10, bottom: 10),
+                    padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
                     decoration: const BoxDecoration(
                       color: foregroundColor, // Medium grey color
 
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                     ),
                     child: Text(
                       'Score: $score \nHealth: $health',
@@ -238,8 +226,7 @@ class _GameScreenState extends State<GameScreen> {
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
-                bottom:
-                    gameStarted ? 0 : -MediaQuery.of(context).size.height * 1,
+                bottom: gameStarted ? 0 : -MediaQuery.of(context).size.height * 1,
                 left: 0,
                 right: 0,
                 child: Column(
@@ -256,78 +243,45 @@ class _GameScreenState extends State<GameScreen> {
                               AnimatedContainer(
                                 duration: const Duration(milliseconds: 300),
                                 alignment: Alignment.center,
-                                width: MediaQuery.of(context).size.width *
-                                            0.25 <
-                                        180
-                                    ? MediaQuery.of(context).size.width * 0.25
-                                    : 180,
-                                height: MediaQuery.of(context).size.width *
-                                            0.25 <
-                                        180
-                                    ? MediaQuery.of(context).size.width * 0.25
-                                    : 180,
+                                width: MediaQuery.of(context).size.width * 0.25 < 180 ? MediaQuery.of(context).size.width * 0.25 : 180,
+                                height: MediaQuery.of(context).size.width * 0.25 < 180 ? MediaQuery.of(context).size.width * 0.25 : 180,
                                 color: squareColors[score - 1],
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     'Previous Color:\n${colorToString(squareColors[score - 1])}',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: visibleColor(
-                                            squareColors[score - 1])),
+                                    style: TextStyle(color: visibleColor(squareColors[score - 1])),
                                   ),
                                 ),
                               ),
                               AnimatedContainer(
                                 duration: const Duration(milliseconds: 300),
                                 alignment: Alignment.center,
-                                width: MediaQuery.of(context).size.width *
-                                            0.25 <
-                                        180
-                                    ? MediaQuery.of(context).size.width * 0.25
-                                    : 180,
-                                height: MediaQuery.of(context).size.width *
-                                            0.25 <
-                                        180
-                                    ? MediaQuery.of(context).size.width * 0.25
-                                    : 180,
+                                width: MediaQuery.of(context).size.width * 0.25 < 180 ? MediaQuery.of(context).size.width * 0.25 : 180,
+                                height: MediaQuery.of(context).size.width * 0.25 < 180 ? MediaQuery.of(context).size.width * 0.25 : 180,
                                 color: guessedColors[score - 1],
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     'Previous Guess:\n${colorToString(guessedColors[score - 1])}',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: visibleColor(
-                                            guessedColors[score - 1])),
+                                    style: TextStyle(color: visibleColor(guessedColors[score - 1])),
                                   ),
                                 ),
                               ),
                               AnimatedContainer(
                                 duration: const Duration(milliseconds: 300),
                                 alignment: Alignment.center,
-                                width: MediaQuery.of(context).size.width *
-                                            0.25 <
-                                        180
-                                    ? MediaQuery.of(context).size.width * 0.25
-                                    : 180,
-                                height: MediaQuery.of(context).size.width *
-                                            0.25 <
-                                        180
-                                    ? MediaQuery.of(context).size.width * 0.25
-                                    : 180,
-                                color: absColorDifference(
-                                    squareColors[score - 1],
-                                    guessedColors[score - 1]),
+                                width: MediaQuery.of(context).size.width * 0.25 < 180 ? MediaQuery.of(context).size.width * 0.25 : 180,
+                                height: MediaQuery.of(context).size.width * 0.25 < 180 ? MediaQuery.of(context).size.width * 0.25 : 180,
+                                color: absColorDifference(squareColors[score - 1], guessedColors[score - 1]),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     'Difference:\n(Darker the Better)\n${newColorToString(colorDifference(squareColors[score - 1], guessedColors[score - 1]))}',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: visibleColor(absColorDifference(
-                                            squareColors[score - 1],
-                                            guessedColors[score - 1]))),
+                                    style: TextStyle(color: visibleColor(absColorDifference(squareColors[score - 1], guessedColors[score - 1]))),
                                   ),
                                 ),
                               ),
@@ -341,9 +295,7 @@ class _GameScreenState extends State<GameScreen> {
                       decoration: const BoxDecoration(
                         color: foregroundColor, // Medium grey color
 
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10)),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -355,7 +307,7 @@ class _GameScreenState extends State<GameScreen> {
                                 redSliderValue = value;
                               });
                             },
-                            activeColor: Colors.red, // Red slider
+                            activeColor: Color.fromARGB(255, 255, 0, 0), // Red slider
                             min: 0,
                             max: 255,
                           ),
@@ -366,7 +318,7 @@ class _GameScreenState extends State<GameScreen> {
                                 greenSliderValue = value;
                               });
                             },
-                            activeColor: Colors.green, // Green slider
+                            activeColor: const Color.fromARGB(255, 0, 255, 0), // Green slider
                             min: 0,
                             max: 255,
                           ),
@@ -377,7 +329,7 @@ class _GameScreenState extends State<GameScreen> {
                                 blueSliderValue = value;
                               });
                             },
-                            activeColor: Colors.blue, // Blue slider
+                            activeColor: const Color.fromARGB(255, 0, 0, 255), // Blue slider
                             min: 0,
                             max: 255,
                           ),
@@ -418,12 +370,8 @@ class _GameScreenState extends State<GameScreen> {
                 child: Center(
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
-                    width: MediaQuery.of(context).size.width * 0.8 < 275
-                        ? MediaQuery.of(context).size.width * 0.8
-                        : 275,
-                    height: MediaQuery.of(context).size.width * 0.8 < 275
-                        ? MediaQuery.of(context).size.width * 0.8
-                        : 275,
+                    width: MediaQuery.of(context).size.width * 0.8 < 275 ? MediaQuery.of(context).size.width * 0.8 : 275,
+                    height: MediaQuery.of(context).size.width * 0.8 < 275 ? MediaQuery.of(context).size.width * 0.8 : 275,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       border: Border.all(color: Colors.white, width: 2.0),
@@ -432,8 +380,7 @@ class _GameScreenState extends State<GameScreen> {
                     alignment: Alignment.center,
                     child: Text(
                       'Guess this Color!',
-                      style: TextStyle(
-                          color: visibleColor(squareColor), fontSize: 40),
+                      style: TextStyle(color: visibleColor(squareColor), fontSize: 40),
                       textAlign: TextAlign.center,
                     ),
                   ),

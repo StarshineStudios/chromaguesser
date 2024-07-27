@@ -8,12 +8,15 @@ import 'game_screen.dart';
 import 'constants.dart';
 
 const generalBox = 'generalBoxString';
+
+//MAIN
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox(generalBox);
   runApp(const ColorGuesserApp());
 }
 
+//THE APP
 class ColorGuesserApp extends StatelessWidget {
   const ColorGuesserApp({super.key});
 
@@ -26,11 +29,13 @@ class ColorGuesserApp extends StatelessWidget {
   }
 }
 
+//TODO: FIX THIS
 List<Widget> pages = [
   const GameScreen(),
   const SettingsScreen(),
 ];
 
+//The main screen
 class ColorGuesserScreen extends StatefulWidget {
   const ColorGuesserScreen({super.key});
 

@@ -307,7 +307,7 @@ class _GameScreenState extends State<GameScreen> {
                                 redSliderValue = value;
                               });
                             },
-                            activeColor: Color.fromARGB(255, 255, 0, 0), // Red slider
+                            activeColor: const Color.fromARGB(255, 255, 0, 0), // Red slider
                             min: 0,
                             max: 255,
                           ),

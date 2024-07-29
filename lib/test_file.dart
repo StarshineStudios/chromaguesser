@@ -5,12 +5,13 @@ import 'package:colorguesser/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:colornames/colornames.dart';
-import 'package:material_color_utilities/material_color_utilities.dart';
 
 // MAIN
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SquareHolder Demo',
       home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 235, 227, 213),
+        backgroundColor: backgroundColor,
         // appBar: AppBar(
         //   title: Text('SquareHolder Demo'),
         // ),
@@ -38,25 +39,24 @@ class MyApp extends StatelessWidget {
             Transform.scale(
               scale: compensationScale,
               child: Transform.rotate(
-                angle: -holderAngle,
+                angle: holderAngle,
                 child: SquareHolder(
+                  biasColor: Color.fromARGB(255, 170, 0, 0),
                   height: elementHeight / compensationScale,
                   padding: 10,
-                  velocity: -0.1,
+                  velocity: 0.1,
                 ),
               ),
             ),
             //SECOND THING
             SizedBox(height: paddingHeight),
-            Container(
-              height: elementHeight,
-              child: Text(
-                'chroma\nguesser',
-                style: GoogleFonts.abrilFatface(
-                  textStyle: TextStyle(
-                    fontSize: elementHeight * 0.9 / 2,
-                    height: 1,
-                  ),
+            Text(
+              'chroma\nguesser',
+              style: GoogleFonts.abrilFatface(
+                textStyle: TextStyle(
+                  color: lightColor,
+                  fontSize: elementHeight * 0.9 / 2,
+                  height: 1,
                 ),
               ),
             ),
@@ -78,6 +78,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: -holderAngle,
                 child: SquareHolder(
+                  biasColor: Color.fromARGB(255, 242, 138, 2),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: -0.1,
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: holderAngle,
                 child: SquareHolder(
+                  biasColor: Color.fromARGB(255, 18, 193, 100),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: 0.1,
@@ -104,6 +106,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: -holderAngle,
                 child: SquareHolder(
+                  biasColor: Color.fromARGB(255, 11, 11, 241),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: -0.1,
@@ -123,11 +126,14 @@ class SquareHolder extends StatefulWidget {
   final double height;
   final double padding;
   final double velocity;
+  final Color biasColor;
 
-  SquareHolder({
+  const SquareHolder({
+    super.key,
     this.height = 150,
     this.padding = 10,
     this.velocity = 3,
+    required this.biasColor,
   });
 
   @override
@@ -135,14 +141,13 @@ class SquareHolder extends StatefulWidget {
 }
 
 class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderStateMixin {
-  List<AnimatedSquare> _squares = <AnimatedSquare>[];
+  final List<AnimatedSquare> _squares = <AnimatedSquare>[];
   late double _squareSize;
   late double _squareWidthWithPadding;
   late double screenWidth;
   late int numSquares;
   final _random = Random();
   late Timer _timer;
-
   @override
   void initState() {
     super.initState();
@@ -167,15 +172,16 @@ class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderSt
             size: _squareSize,
             padding: widget.padding,
             position: i * _squareWidthWithPadding,
-            color: Color.fromARGB(
-              255,
-              _random.nextInt(256),
-              _random.nextInt(256),
-              _random.nextInt(256),
-            ),
+            color: getRandomColor(widget.biasColor, distance: 150),
             label: i + 1,
           ),
         );
+        for (int j = 0; j < _squares.length - 1; j++) {
+          if (_squares[j].color == _squares[_squares.length - 1].color) {
+            i++;
+            print('repeat deleted');
+          }
+        }
       }
     } else {
       for (var i = 0; i < numSquares; i++) {
@@ -184,16 +190,16 @@ class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderSt
             size: _squareSize,
             padding: widget.padding,
             position: i * _squareWidthWithPadding,
-            color: Color.fromARGB(
-              255,
-              //not 0 to 255, want to make it a bit more muted
-              _random.nextInt(200) + 28,
-              _random.nextInt(200) + 28,
-              _random.nextInt(200) + 28,
-            ),
+            color: getRandomColor(widget.biasColor, distance: 150),
             label: i + 1,
           ),
         );
+        for (int j = 0; j < _squares.length - 1; j++) {
+          if (_squares[j].color == _squares[_squares.length - 1].color) {
+            i--;
+            print('repeat deleted');
+          }
+        }
       }
     }
     // _squares = List.generate(numSquares, (i) {
@@ -241,7 +247,7 @@ class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Container(
       height: widget.height,
-      color: Colors.white,
+      color: lightColor,
       child: Stack(
         children: _squares.map((square) => square.getWidget()).toList(),
       ),
@@ -295,10 +301,13 @@ class AnimatedSquare {
         ),
         child: Center(
           child: Center(
-            child: Text(
-              color.colorName,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.abrilFatface(textStyle: TextStyle(color: getContrastingColor(color), fontWeight: FontWeight.bold)),
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Text(
+                color.colorName.replaceAll(RegExp(' '), '\n'),
+                textAlign: TextAlign.center,
+                style: GoogleFonts.abrilFatface(textStyle: TextStyle(color: getContrastingColor(color), fontWeight: FontWeight.bold)),
+              ),
             ),
           ),
         ),
@@ -310,8 +319,8 @@ class AnimatedSquare {
 Color getContrastingColor(Color color) {
   HSLColor hslColor = HSLColor.fromColor(color);
 
-  // Adjust lightness
-  double adjustedLightness = hslColor.lightness > 0.5 ? hslColor.lightness - 0.4 : hslColor.lightness + 0.4;
+  // Adjust lightness, prefer to brighten
+  double adjustedLightness = hslColor.lightness > 0.75 ? hslColor.lightness - 0.4 : hslColor.lightness + 0.4;
 
   // Ensure lightness is within a reasonable range
   adjustedLightness = adjustedLightness.clamp(0.2, 0.8);
@@ -332,4 +341,47 @@ Color getContrastingColor(Color color) {
   adjustedLightness = adjustedLightness.clamp(0.2, 0.8);
 
   return hslColor.withLightness(adjustedLightness).withSaturation(adjustedSaturation).toColor();
+}
+
+Color getRandomColor(Color inputColor, {int distance = 50}) {
+  final Random random = Random();
+
+  // Helper function to clamp values between 0 and 255
+  int clamp(int value) {
+    return value.clamp(0, 255).toInt();
+  }
+
+  // Generate random changes for each RGB component
+  List<int> getRandomChanges(int distance) {
+    List<int> changes = [0, 0, 0];
+    int remainingDistance = distance;
+
+    // Distribute the distance randomly among R, G, B
+    for (int i = 0; i < 3; i++) {
+      int maxChange = min(remainingDistance, 255);
+      int change = random.nextInt(maxChange + 1); // Change can be from 0 to remainingDistance
+      changes[i] = random.nextBool() ? change : -change;
+      remainingDistance -= change.abs();
+    }
+
+    // Ensure the sum of absolute changes is less than or equal to the specified distance
+    while (remainingDistance > 0) {
+      int i = random.nextInt(3);
+      int maxChange = min(remainingDistance, 255 - changes[i].abs());
+      int change = random.nextInt(maxChange + 1);
+      changes[i] += random.nextBool() ? change : -change;
+      remainingDistance -= change.abs();
+    }
+
+    return changes;
+  }
+
+  // Get the changes for RGB values
+  List<int> rgbChanges = getRandomChanges(distance);
+
+  int red = clamp(inputColor.red + rgbChanges[0]);
+  int green = clamp(inputColor.green + rgbChanges[1]);
+  int blue = clamp(inputColor.blue + rgbChanges[2]);
+
+  return Color.fromARGB(inputColor.alpha, red, green, blue);
 }

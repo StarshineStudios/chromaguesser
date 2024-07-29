@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-
 import 'constants.dart';
 import 'dart:math' as math;
 import 'package:colorguesser/main_menu_elements.dart';
@@ -22,7 +20,7 @@ class MyApp extends StatelessWidget {
     double paddingHeight = height / (5 * elementToPaddingRatio + 6);
     double elementHeight = elementToPaddingRatio * paddingHeight;
 
-    double holderAngle = math.pi / 120;
+    double holderAngle = math.pi / 150;
     double compensationScale = 1.2;
 
     return MaterialApp(

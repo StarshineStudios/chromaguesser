@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'dart:math';
 import 'package:colorguesser/constants.dart';
 import 'package:flutter/material.dart';

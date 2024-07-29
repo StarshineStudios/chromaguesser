@@ -32,16 +32,16 @@ class MyApp extends StatelessWidget {
         // appBar: AppBar(
         //   title: Text('SquareHolder Demo'),
         // ),
-        body: Column(
+        body: ListView(
           children: [
             //FIRST THING
-            SizedBox(height: paddingHeight * 2),
+            // SizedBox(height: paddingHeight * 2),
             Transform.scale(
               scale: compensationScale,
               child: Transform.rotate(
                 angle: holderAngle,
                 child: SquareHolder(
-                  biasColor: Color.fromARGB(255, 170, 0, 0),
+                  biasColor: const Color.fromARGB(255, 200, 0, 0),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: 0.1,
@@ -49,14 +49,32 @@ class MyApp extends StatelessWidget {
               ),
             ),
             //SECOND THING
-            SizedBox(height: paddingHeight),
-            Text(
-              'chroma\nguesser',
-              style: GoogleFonts.abrilFatface(
-                textStyle: TextStyle(
-                  color: lightColor,
-                  fontSize: elementHeight * 0.9 / 2,
-                  height: 1,
+            SizedBox(height: paddingHeight * 0.3),
+            Center(
+              child: Text(
+                textAlign: TextAlign.center,
+                'chroma\nguesser',
+                style: GoogleFonts.abrilFatface(
+                  textStyle: TextStyle(
+                    color: lightColor,
+                    fontSize: elementHeight * 1.4 / 2,
+                    height: 1,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: paddingHeight * 0.6),
+
+            Center(
+              child: Text(
+                textAlign: TextAlign.center,
+                'Press any color to start!',
+                style: GoogleFonts.abrilFatface(
+                  textStyle: TextStyle(
+                    color: lightColor,
+                    fontSize: elementHeight * 0.4 / 2,
+                    height: 1,
+                  ),
                 ),
               ),
             ),
@@ -78,7 +96,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: -holderAngle,
                 child: SquareHolder(
-                  biasColor: Color.fromARGB(255, 242, 138, 2),
+                  biasColor: const Color.fromARGB(255, 184, 141, 0),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: -0.1,
@@ -92,7 +110,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: holderAngle,
                 child: SquareHolder(
-                  biasColor: Color.fromARGB(255, 18, 193, 100),
+                  biasColor: const Color.fromARGB(255, 18, 193, 100),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: 0.1,
@@ -106,10 +124,24 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: -holderAngle,
                 child: SquareHolder(
-                  biasColor: Color.fromARGB(255, 11, 11, 241),
+                  biasColor: const Color.fromARGB(255, 10, 10, 134),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: -0.1,
+                ),
+              ),
+            ),
+            //FIFTH THING
+            SizedBox(height: paddingHeight),
+            Transform.scale(
+              scale: compensationScale,
+              child: Transform.rotate(
+                angle: holderAngle,
+                child: SquareHolder(
+                  biasColor: const Color.fromARGB(255, 164, 164, 164),
+                  height: elementHeight / compensationScale,
+                  padding: 10,
+                  velocity: 0.1,
                 ),
               ),
             ),
@@ -137,7 +169,7 @@ class SquareHolder extends StatefulWidget {
   });
 
   @override
-  _SquareHolderState createState() => _SquareHolderState();
+  State<SquareHolder> createState() => _SquareHolderState();
 }
 
 class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderStateMixin {
@@ -146,7 +178,7 @@ class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderSt
   late double _squareWidthWithPadding;
   late double screenWidth;
   late int numSquares;
-  final _random = Random();
+  // final _random = Random();
   late Timer _timer;
   @override
   void initState() {
@@ -177,7 +209,7 @@ class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderSt
           ),
         );
         for (int j = 0; j < _squares.length - 1; j++) {
-          if (_squares[j].color == _squares[_squares.length - 1].color) {
+          if (_squares[j].color.colorName == _squares[_squares.length - 1].color.colorName) {
             i++;
             print('repeat deleted');
           }

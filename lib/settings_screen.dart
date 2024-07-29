@@ -1,6 +1,6 @@
 import 'package:colorguesser/constants.dart';
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'main_menu_/main.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class SettingsScreen extends StatefulWidget {

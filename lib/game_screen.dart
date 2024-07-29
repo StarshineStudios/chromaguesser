@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'main.dart';
+import 'main_menu_/main.dart';
 
 import 'dart:math';
 import 'constants.dart';

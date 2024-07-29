@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import '../constants.dart';
 import 'dart:math' as math;
-import 'package:colorguesser/main_menu_elements.dart';
+import 'package:colorguesser/main_menu_/square_holder.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // MAIN
@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: -holderAngle,
                 child: SquareHolder(
-                  biasColor: const Color.fromARGB(255, 184, 104, 0),
+                  biasColor: const Color.fromARGB(255, 184, 49, 0),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: -0.1,

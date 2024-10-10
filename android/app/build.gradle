@@ -33,7 +33,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.example.colorguesser"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34//flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {

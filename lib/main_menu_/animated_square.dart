@@ -59,3 +59,45 @@ class AnimatedSquare {
     );
   }
 }
+
+class NormalSquare {
+  final double size;
+  final double padding;
+  final Color color;
+
+  NormalSquare({
+    required this.size,
+    required this.padding,
+    required this.color,
+  });
+
+  Widget getWidget(BuildContext context) {
+    return Positioned(
+      top: padding,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              color.colorName.replaceAll(RegExp(' '), '\n'),
+              textAlign: TextAlign.center,
+              style: GoogleFonts.abrilFatface(
+                textStyle: TextStyle(
+                  color: getContrastingColor(color),
+                  fontSize: size * 0.2,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

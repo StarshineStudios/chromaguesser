@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'package:colorguesser/constants.dart';
+import 'package:colorguesser/main_menu_/animated_square.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:colornames/colornames.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class ColorScreen extends StatefulWidget {
   final Color initialColor;
@@ -26,9 +28,9 @@ class _ColorScreenState extends State<ColorScreen> {
   _ColorScreenState()
       : currentColor = Colors.white,
         guessedColor = Colors.white,
-        redSliderValue = 0,
-        greenSliderValue = 0,
-        blueSliderValue = 0;
+        redSliderValue = 128,
+        greenSliderValue = 128,
+        blueSliderValue = 128;
 
   @override
   void initState() {
@@ -59,9 +61,9 @@ class _ColorScreenState extends State<ColorScreen> {
         Random().nextInt(256),
         1.0,
       );
-      redSliderValue = 0;
-      greenSliderValue = 0;
-      blueSliderValue = 0;
+      redSliderValue = 128;
+      greenSliderValue = 128;
+      blueSliderValue = 128;
       hasSubmitted = false;
     });
   }
@@ -69,6 +71,7 @@ class _ColorScreenState extends State<ColorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: const Text('Color Game'),
       ),
@@ -83,7 +86,10 @@ class _ColorScreenState extends State<ColorScreen> {
                   children: [
                     const Icon(Icons.favorite, color: Colors.red),
                     const SizedBox(width: 5),
-                    Text('Health: $health'),
+                    Text(
+                      'Health: $health',
+                      style: niceTextStyle(5),
+                    ),
                   ],
                 ),
                 Row(
@@ -94,41 +100,28 @@ class _ColorScreenState extends State<ColorScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            Container(
-              width: 100,
-              height: 100,
-              color: currentColor,
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: Text(
-                    currentColor.colorName,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.abrilFatface(
-                      textStyle: TextStyle(
-                        color: getContrastingColor(currentColor),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            NormalSquare(size: 200, padding: 1, color: currentColor).getWidget(context),
             const SizedBox(height: 20),
             if (!hasSubmitted)
               Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  buildSlider('Red', redSliderValue, (value) {
-                    setState(() {
-                      redSliderValue = value;
-                    });
-                  }),
-                  buildSlider('Green', greenSliderValue, (value) {
-                    setState(() {
-                      greenSliderValue = value;
-                    });
-                  }),
-                  buildSlider('Blue', blueSliderValue, (value) {
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildSlider('Red', redSliderValue, Color.fromARGB(255, redSliderValue.round(), 0, 0), (value) {
+                        setState(() {
+                          redSliderValue = value;
+                        });
+                      }),
+                      buildSlider('Green', greenSliderValue, Color.fromARGB(255, 0, greenSliderValue.round(), 0), (value) {
+                        setState(() {
+                          greenSliderValue = value;
+                        });
+                      }),
+                    ],
+                  ),
+                  buildSlider('Blue', blueSliderValue, Color.fromARGB(255, 0, 0, blueSliderValue.round()), (value) {
                     setState(() {
                       blueSliderValue = value;
                     });
@@ -177,21 +170,66 @@ class _ColorScreenState extends State<ColorScreen> {
     );
   }
 
-  Widget buildSlider(String label, double value, ValueChanged<double> onChanged) {
-    return Row(
+  Widget buildSlider(String label, double value, Color color, ValueChanged<double> onChanged) {
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        Text('$label: ${value.toInt()}'),
-        Expanded(
-          child: Slider(
-            value: value,
-            min: 0,
-            max: 255,
-            divisions: 255,
-            label: value.toInt().toString(),
-            onChanged: onChanged,
+        SleekCircularSlider(
+          initialValue: value,
+          min: 0,
+          max: 255,
+          appearance: CircularSliderAppearance(
+            customWidths: CustomSliderWidths(
+              trackWidth: 20,
+              progressBarWidth: 10,
+            ),
+            startAngle: 90,
+            angleRange: 360,
+            infoProperties: InfoProperties(mainLabelStyle: TextStyle(fontSize: 0)),
+            customColors: CustomSliderColors(
+              trackColor: Colors.black,
+              progressBarColor: Colors.white,
+            ),
           ),
+          onChange: onChanged,
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: SizedBox(
+            width: 0,
+            height: 0,
+            child: CustomPaint(
+              size: Size(111, 111),
+              painter: BlendingCirclesPainter(color),
+            ),
+          ),
+        ),
+        Text(
+          value.round().toString(),
+          style: TextStyle(fontSize: 30, color: getContrastingColor(color)),
         ),
       ],
     );
   }
+}
+
+class BlendingCirclesPainter extends CustomPainter {
+  final Color color;
+  BlendingCirclesPainter(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..blendMode = BlendMode.plus;
+    double baseRadius = 50;
+
+    void drawCircle(Color color, Offset center) {
+      paint.color = color;
+      canvas.drawCircle(center, baseRadius, paint);
+    }
+
+    drawCircle(color, const Offset(0, 0));
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

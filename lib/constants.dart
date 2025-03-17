@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:google_fonts/google_fonts.dart';
 
 const Color backgroundColor = Color.fromARGB(255, 31, 29, 50);
 
@@ -9,6 +12,14 @@ const Color brightColor = Color.fromARGB(255, 87, 76, 190);
 
 const Color fadedColor = Color.fromARGB(255, 103, 102, 121);
 const Color lightColor = Color.fromARGB(255, 255, 255, 255);
+
+TextStyle niceTextStyle(int fontSize) {
+  return GoogleFonts.abrilFatface(
+      textStyle: const TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+  ));
+}
 
 class NiceButton extends StatefulWidget {
   final Color color;

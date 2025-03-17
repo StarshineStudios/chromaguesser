@@ -106,36 +106,35 @@ extension ColorNameRGB on Color {
 }
 
 Color getContrastingColor(Color color) {
+  if (color == Colors.black || color == Colors.white) return Colors.grey;
+
   double threshold = 0.5;
   HSLColor hslColor = HSLColor.fromColor(color);
 
   //we use a formula for the percieved brightness. Green>red>blue in brightness.
   //the max percieved brightness is obviously
-  double greenFactor = 0.9, redFactor = 0.5, blueFactor = 0.4;
+  double greenFactor = 0.587, redFactor = 0.299, blueFactor = 0.114;
   double percievedBrightness =
       (color.green * greenFactor + color.red * redFactor + color.blue * blueFactor) / (255 * greenFactor + 255 * redFactor + 255 * blueFactor);
-
-  //FOR SOME REASON, GREEN APPEARS SUPER BRIGHT. I WILL JUST AUTO-DARKEN ANY COLOR WITH GREEN AS BIGGEST COLOR
-  if (color.green * greenFactor > color.red * redFactor && color.green > color.blue * 0.6) percievedBrightness = 1;
 
   // Adjust lightness, prefer to darken
   //double adjustedLightness = hslColor.lightness > 0.3 ? hslColor.lightness - 0.4 : hslColor.lightness + 0.4;
   double adjustedLightness = percievedBrightness > threshold ? hslColor.lightness - 0.6 : hslColor.lightness + 0.6;
 
   // Ensure lightness is within a reasonable range
-  adjustedLightness = adjustedLightness.clamp(0.2, 0.8);
+  //adjustedLightness = adjustedLightness.clamp(0.2, 0.8);
 
   // Adjust saturation
   double adjustedSaturation = percievedBrightness > threshold ? (hslColor.saturation * 0.6).clamp(0.0, 1.0) : (hslColor.saturation * 1.4).clamp(0.0, 1.0);
 
   // Maintain perceptual brightness by tweaking saturation
-  if (hslColor.hue >= 60 && hslColor.hue <= 180) {
-    // Greenish colors
-    adjustedLightness = hslColor.lightness > 0.5 ? hslColor.lightness - 0.35 : hslColor.lightness + 0.35;
-  } else if (hslColor.hue > 180 && hslColor.hue < 300) {
-    // Blueish colors
-    adjustedLightness = hslColor.lightness > 0.5 ? hslColor.lightness - 0.45 : hslColor.lightness + 0.45;
-  }
+  // if (hslColor.hue >= 60 && hslColor.hue <= 180) {
+  //   // Greenish colors
+  //   adjustedLightness = hslColor.lightness > 0.5 ? hslColor.lightness - 0.35 : hslColor.lightness + 0.35;
+  // } else if (hslColor.hue > 180 && hslColor.hue < 300) {
+  //   // Blueish colors
+  //   adjustedLightness = hslColor.lightness > 0.5 ? hslColor.lightness - 0.45 : hslColor.lightness + 0.45;
+  // }
 
   // Ensure lightness is within a reasonable range after perceptual tweaks
   adjustedLightness = adjustedLightness.clamp(0.2, 0.8);

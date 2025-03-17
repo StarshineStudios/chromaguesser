@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: holderAngle,
                 child: SquareHolder(
-                  biasColor: const Color.fromARGB(255, 200, 0, 0),
+                  biasColor: const Color.fromARGB(255, 236, 9, 9),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: 0.1,
@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: -holderAngle,
                 child: SquareHolder(
-                  biasColor: const Color.fromARGB(255, 184, 49, 0),
+                  biasColor: const Color.fromARGB(255, 255, 225, 0),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: -0.1,
@@ -122,7 +122,7 @@ class MyApp extends StatelessWidget {
               child: Transform.rotate(
                 angle: -holderAngle,
                 child: SquareHolder(
-                  biasColor: const Color.fromARGB(255, 10, 10, 134),
+                  biasColor: const Color.fromARGB(255, 56, 137, 207),
                   height: elementHeight / compensationScale,
                   padding: 10,
                   velocity: -0.1,

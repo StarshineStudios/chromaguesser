@@ -48,6 +48,7 @@ class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderSt
     _squareWidthWithPadding = _squareSize + widget.padding;
     numSquares = (screenWidth / _squareWidthWithPadding).ceil() + 1 + 1; //1 for safety, second 1 should be modified to add extra colors if wanted
 
+    int appropriateDistance = (150 * 255 / (widget.biasColor.red + widget.biasColor.green + widget.biasColor.blue)).round();
     if (widget.velocity > 0) {
       for (var i = numSquares - 1; i >= 0; i--) {
         _squares.add(
@@ -55,7 +56,7 @@ class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderSt
             size: _squareSize,
             padding: widget.padding,
             position: i * _squareWidthWithPadding,
-            color: getRandomColor(widget.biasColor, distance: 150),
+            color: getRandomColor(widget.biasColor, distance: appropriateDistance),
             label: i + 1,
           ),
         );
@@ -74,7 +75,7 @@ class _SquareHolderState extends State<SquareHolder> with SingleTickerProviderSt
             size: _squareSize,
             padding: widget.padding,
             position: i * _squareWidthWithPadding,
-            color: getRandomColor(widget.biasColor, distance: 150),
+            color: getRandomColor(widget.biasColor, distance: appropriateDistance),
             label: i + 1,
           ),
         );

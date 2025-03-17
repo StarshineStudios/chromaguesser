@@ -13,11 +13,12 @@ const Color brightColor = Color.fromARGB(255, 87, 76, 190);
 const Color fadedColor = Color.fromARGB(255, 103, 102, 121);
 const Color lightColor = Color.fromARGB(255, 255, 255, 255);
 
-TextStyle niceTextStyle(int fontSize) {
+TextStyle niceTextStyle(double fontSize) {
   return GoogleFonts.abrilFatface(
-      textStyle: const TextStyle(
+      textStyle: TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,
+    fontSize: fontSize,
   ));
 }
 
@@ -116,41 +117,29 @@ extension ColorNameRGB on Color {
   }
 }
 
-Color getContrastingColor(Color color) {
+Color getContrastingColor(Color color, {int alpha = 255}) {
   if (color == Colors.black || color == Colors.white) return Colors.grey;
 
   double threshold = 0.5;
   HSLColor hslColor = HSLColor.fromColor(color);
 
-  //we use a formula for the percieved brightness. Green>red>blue in brightness.
-  //the max percieved brightness is obviously
+  // We use a formula for the perceived brightness. Green > red > blue in brightness.
+  // The max perceived brightness is obviously
   double greenFactor = 0.587, redFactor = 0.299, blueFactor = 0.114;
   double percievedBrightness =
       (color.green * greenFactor + color.red * redFactor + color.blue * blueFactor) / (255 * greenFactor + 255 * redFactor + 255 * blueFactor);
 
   // Adjust lightness, prefer to darken
-  //double adjustedLightness = hslColor.lightness > 0.3 ? hslColor.lightness - 0.4 : hslColor.lightness + 0.4;
   double adjustedLightness = percievedBrightness > threshold ? hslColor.lightness - 0.6 : hslColor.lightness + 0.6;
 
   // Ensure lightness is within a reasonable range
-  //adjustedLightness = adjustedLightness.clamp(0.2, 0.8);
+  adjustedLightness = adjustedLightness.clamp(0.2, 0.8);
 
   // Adjust saturation
   double adjustedSaturation = percievedBrightness > threshold ? (hslColor.saturation * 0.6).clamp(0.0, 1.0) : (hslColor.saturation * 1.4).clamp(0.0, 1.0);
 
-  // Maintain perceptual brightness by tweaking saturation
-  // if (hslColor.hue >= 60 && hslColor.hue <= 180) {
-  //   // Greenish colors
-  //   adjustedLightness = hslColor.lightness > 0.5 ? hslColor.lightness - 0.35 : hslColor.lightness + 0.35;
-  // } else if (hslColor.hue > 180 && hslColor.hue < 300) {
-  //   // Blueish colors
-  //   adjustedLightness = hslColor.lightness > 0.5 ? hslColor.lightness - 0.45 : hslColor.lightness + 0.45;
-  // }
-
-  // Ensure lightness is within a reasonable range after perceptual tweaks
-  adjustedLightness = adjustedLightness.clamp(0.2, 0.8);
-
-  return hslColor.withLightness(adjustedLightness).withSaturation(adjustedSaturation).toColor();
+  // Return the color with the adjusted lightness, saturation, and the alpha channel set
+  return hslColor.withLightness(adjustedLightness).withSaturation(adjustedSaturation).toColor().withAlpha(alpha);
 }
 
 Color getRandomColor(Color inputColor, {int distance = 50}) {

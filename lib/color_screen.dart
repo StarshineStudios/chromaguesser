@@ -6,16 +6,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:colornames/colornames.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-class ColorScreen extends StatefulWidget {
+class ColorSelectionScreen extends StatefulWidget {
   final Color initialColor;
 
-  const ColorScreen({super.key, required this.initialColor});
+  const ColorSelectionScreen({super.key, required this.initialColor});
 
   @override
-  State<ColorScreen> createState() => _ColorScreenState();
+  State<ColorSelectionScreen> createState() => _ColorSelectionScreenState();
 }
 
-class _ColorScreenState extends State<ColorScreen> {
+class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
   int health = 765;
   int score = 0;
   bool hasSubmitted = false;
@@ -25,7 +25,7 @@ class _ColorScreenState extends State<ColorScreen> {
   double greenSliderValue;
   double blueSliderValue;
 
-  _ColorScreenState()
+  _ColorSelectionScreenState()
       : currentColor = Colors.white,
         guessedColor = Colors.white,
         redSliderValue = 128,
@@ -88,7 +88,7 @@ class _ColorScreenState extends State<ColorScreen> {
                     const SizedBox(width: 5),
                     Text(
                       'Health: $health',
-                      style: niceTextStyle(5),
+                      style: niceTextStyle(20),
                     ),
                   ],
                 ),
@@ -102,55 +102,110 @@ class _ColorScreenState extends State<ColorScreen> {
             const SizedBox(height: 20),
             NormalSquare(size: 200, padding: 1, color: currentColor).getWidget(context),
             const SizedBox(height: 20),
-            if (!hasSubmitted)
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      buildSlider('Red', redSliderValue, Color.fromARGB(255, redSliderValue.round(), 0, 0), (value) {
-                        setState(() {
-                          redSliderValue = value;
-                        });
-                      }),
-                      buildSlider('Green', greenSliderValue, Color.fromARGB(255, 0, greenSliderValue.round(), 0), (value) {
-                        setState(() {
-                          greenSliderValue = value;
-                        });
-                      }),
-                    ],
-                  ),
-                  buildSlider('Blue', blueSliderValue, Color.fromARGB(255, 0, 0, blueSliderValue.round()), (value) {
-                    setState(() {
-                      blueSliderValue = value;
-                    });
-                  }),
-                ],
-              ),
-            if (hasSubmitted)
-              Column(
-                children: [
-                  const Text(
-                    'Your Guess',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    width: 100,
-                    height: 100,
-                    color: guessedColor,
-                  ),
-                  if (health <= 0)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: Text(
-                        'Thanks for playing',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            // if (!hasSubmitted)
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.black,
+                ),
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    //THE ACTUAL LIGHTS
+                    AnimatedPositioned(
+                      duration: const Duration(seconds: 1),
+                      right: hasSubmitted ? 0 : MediaQuery.of(context).size.width - 200,
+                      left: 0,
+                      top: hasSubmitted ? 60 : 30,
+                      child: buildSlider(
+                        'Red',
+                        redSliderValue,
+                        Color.fromARGB(255, redSliderValue.round(), 0, 0),
+                        (value) {
+                          setState(() {
+                            redSliderValue = value;
+                          });
+                        },
+                        hasSubmitted ? 0 : 255,
                       ),
                     ),
-                ],
+                    AnimatedPositioned(
+                      duration: const Duration(seconds: 1),
+                      left: hasSubmitted ? 0 : MediaQuery.of(context).size.width - 200,
+                      right: 0,
+                      top: hasSubmitted ? 60 : 30,
+                      child: buildSlider(
+                        'Green',
+                        greenSliderValue,
+                        Color.fromARGB(255, 0, greenSliderValue.round(), 0),
+                        (value) {
+                          setState(() {
+                            greenSliderValue = value;
+                          });
+                        },
+                        hasSubmitted ? 0 : 255,
+                      ),
+                    ),
+                    AnimatedPositioned(
+                      duration: const Duration(seconds: 1),
+                      top: hasSubmitted ? 60 : 160,
+                      child: buildSlider(
+                        'Blue',
+                        blueSliderValue,
+                        Color.fromARGB(255, 0, 0, blueSliderValue.round()),
+                        (value) {
+                          setState(() {
+                            blueSliderValue = value;
+                          });
+                        },
+                        hasSubmitted ? 0 : 255,
+                      ),
+                    ),
+                    if (hasSubmitted)
+                      Positioned(
+                        bottom: 40,
+                        child: Text(
+                          'Your Guess: ${Color.fromARGB(255, redSliderValue.floor(), greenSliderValue.floor(), blueSliderValue.floor()).colorName}',
+                          style: niceTextStyle(20),
+                        ),
+                      ),
+                    // if (hasSubmitted)
+                    //   Positioned(
+                    //     bottom: 40,
+                    //     child: Text(
+                    //       //TODO: DO THIS
+                    //       'Difference: DO THIS${Color.fromARGB(255, redSliderValue.floor(), greenSliderValue.floor(), blueSliderValue.floor()).colorName}',
+                    //       style: niceTextStyle(20),
+                    //     ),
+                    //   )
+                  ],
+                ),
               ),
+            ),
+            // if (hasSubmitted)
+            //   Column(
+            //     children: [
+            //       const Text(
+            //         'Your Guess',
+            //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            //       ),
+            //       const SizedBox(height: 10),
+            //       Container(
+            //         width: 100,
+            //         height: 100,
+            //         color: guessedColor,
+            //       ),
+            //       if (health <= 0)
+            //         const Padding(
+            //           padding: EdgeInsets.only(top: 20.0),
+            //           child: Text(
+            //             'Thanks for playing',
+            //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            //           ),
+            //         ),
+            //     ],
+            //   ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -170,29 +225,10 @@ class _ColorScreenState extends State<ColorScreen> {
     );
   }
 
-  Widget buildSlider(String label, double value, Color color, ValueChanged<double> onChanged) {
+  Widget buildSlider(String label, double value, Color color, ValueChanged<double> onChanged, int alpha) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        SleekCircularSlider(
-          initialValue: value,
-          min: 0,
-          max: 255,
-          appearance: CircularSliderAppearance(
-            customWidths: CustomSliderWidths(
-              trackWidth: 20,
-              progressBarWidth: 10,
-            ),
-            startAngle: 90,
-            angleRange: 360,
-            infoProperties: InfoProperties(mainLabelStyle: TextStyle(fontSize: 0)),
-            customColors: CustomSliderColors(
-              trackColor: Colors.black,
-              progressBarColor: Colors.white,
-            ),
-          ),
-          onChange: onChanged,
-        ),
         Align(
           alignment: Alignment.center,
           child: SizedBox(
@@ -204,9 +240,30 @@ class _ColorScreenState extends State<ColorScreen> {
             ),
           ),
         ),
+        SleekCircularSlider(
+          initialValue: value,
+          min: 0,
+          max: 255,
+          appearance: CircularSliderAppearance(
+            customWidths: CustomSliderWidths(
+              trackWidth: 0,
+              progressBarWidth: 10,
+            ),
+            startAngle: 90 + 30,
+            angleRange: 300,
+            infoProperties: InfoProperties(mainLabelStyle: TextStyle(fontSize: 0)),
+            customColors: CustomSliderColors(
+              dotColor: Color.fromARGB(alpha, 0, 0, 0),
+              shadowMaxOpacity: 0,
+              trackColor: Colors.transparent,
+              progressBarColor: getContrastingColor(color, alpha: alpha),
+            ),
+          ),
+          onChange: onChanged,
+        ),
         Text(
           value.round().toString(),
-          style: TextStyle(fontSize: 30, color: getContrastingColor(color)),
+          style: TextStyle(fontSize: 30, color: getContrastingColor(color, alpha: alpha)),
         ),
       ],
     );
@@ -220,7 +277,7 @@ class BlendingCirclesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..blendMode = BlendMode.plus;
-    double baseRadius = 50;
+    double baseRadius = 80;
 
     void drawCircle(Color color, Offset center) {
       paint.color = color;

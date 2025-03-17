@@ -28,7 +28,7 @@ class AnimatedSquare {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ColorScreen(initialColor: color),
+              builder: (context) => ColorSelectionScreen(initialColor: color),
             ),
           );
         },

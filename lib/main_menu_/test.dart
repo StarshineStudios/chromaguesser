@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class AdditiveBlendingCircles extends StatefulWidget {
+  const AdditiveBlendingCircles({super.key});
+
   @override
   _AdditiveBlendingCirclesState createState() => _AdditiveBlendingCirclesState();
 }
@@ -16,7 +18,7 @@ class _AdditiveBlendingCirclesState extends State<AdditiveBlendingCircles> with 
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _animation = Tween<double>(begin: 1.0, end: 0.0).animate(_controller)
       ..addListener(() {
@@ -38,10 +40,10 @@ class _AdditiveBlendingCirclesState extends State<AdditiveBlendingCircles> with 
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomPaint(
-          size: Size(200, 200),
+          size: const Size(200, 200),
           painter: BlendingCirclesPainter(radiusFactor),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             if (_controller.status == AnimationStatus.completed) {
@@ -50,7 +52,7 @@ class _AdditiveBlendingCirclesState extends State<AdditiveBlendingCircles> with 
               _controller.forward();
             }
           },
-          child: Text("Merge Circles"),
+          child: const Text("Merge Circles"),
         ),
       ],
     );
@@ -82,7 +84,7 @@ class BlendingCirclesPainter extends CustomPainter {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: Scaffold(
       backgroundColor: Colors.black,
       body: Center(child: AdditiveBlendingCircles()),

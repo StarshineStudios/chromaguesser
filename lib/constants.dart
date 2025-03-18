@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -17,7 +16,7 @@ TextStyle niceTextStyle(double fontSize) {
   return GoogleFonts.abrilFatface(
       textStyle: TextStyle(
     color: Colors.white,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.normal,
     fontSize: fontSize,
   ));
 }
